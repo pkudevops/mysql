@@ -1,5 +1,14 @@
 FROM debian:wheezy
 
+# Use Chinese
+RUN apt-get update \
+    && apt-get install -y locales \
+    && sed -i -e 's@^# \(zh_CN.UTF-8 UTF-8\)@\1@' /etc/locale.gen \
+    && locale-gen \
+    && update-locale LANG=zh_CN.UTF-8 LANGUAGE="zh_CN:zh" \
+    && mv /etc/localtime /etc/localtime.org \
+    && ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -r mysql && useradd -r -g mysql mysql
 
